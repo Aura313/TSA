@@ -77,8 +77,8 @@ def _feature_has_overall_positive_polarity(data_node):
 
 #Overall negative polarity
 def _feature_has_overall_negative_polarity(data_node):
-	pass
 	#sentlex
+	pass
 
 #HasSlang
 
@@ -100,8 +100,6 @@ def _feature_has_hashtags(data_node):
 #Number of Hashtags
 def _feature_number_of_hashtags(data_node):
 	return len(re.findall(HASHTAG_REGEX,data_node))
-
-
 
 #Number of Positive emoticon
 def _feature_number_of_positive_emoticons(data_node):
@@ -169,7 +167,7 @@ def feature_transform(data_node):
 # print _feature_number_of_positive_emoticons("I think barca is going to win this time!:):):):):) :) :D #barca #football")
 print _feature_has_hashtags("No,I don't think barca is going to win this time! :( #barca #football")
 print  _feature_number_of_hashtags("No,I don't think barca is going to win this time! :( #barca #football")
-# # print _feature_number_of_negative_emoticons("No, we can't lose this world to trump. :( :/")
+# print _feature_number_of_negative_emoticons("No, we can't lose this world to trump. :( :/")
 # print _feature_has_link("Yaar ye website kitni faad hai http://google.com ")
 # print _feature_has_link("Yaar ye pornsite kitni faad hai www.gaandfaad.com")
 # print 
