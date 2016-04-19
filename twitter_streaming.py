@@ -14,7 +14,7 @@ consumer_secret = "PE1HvGC8q61IKJdslhfmZr6Pm531fh5ofakZ0oqbBB8BSULdGf"
 class StdOutListener(StreamListener):
 
     def __init__(self):
-        self.filename = 'output'
+        self.filename = '../output/output'
         self.counter = 0
         self.file_counter = 0
         self.file_obj = open(self.filename,'w+')
@@ -24,11 +24,12 @@ class StdOutListener(StreamListener):
         self.file_obj.write(data)
 
         self.counter += 1
-        if self.counter >= 50:
+        if self.counter >= 500:
             self.file_counter += 1
             self.file_obj.close()
             print "NEW FILE OPENED"
             self.file_obj = open(self.filename + str(self.file_counter),'w+')
+            self.counter = 0
         return True
 
     def on_error(self, status):
