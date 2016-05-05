@@ -1,0 +1,73 @@
+#Approach
+
+##Motivation
+	Twitter has a word limit of 140 characters. On the face of it, it implies that the amount of information contained in the form of natural language per tweet would be rather less. However, over the years a multitute of norms have evolved on twitter, which condense the information, making it possible for users to express a lot, given the small character limit, in the form of acronyms, hashtags, user mentions, links, slangs, emoticons and the likes. This poses a unique challange in the task of extracting opinions, or sentiments in tweets.  We attempt to capture the information contained in the aforementioned ways, going beyond natural language's syntactic analysis in the form of a comprehensive featureset, based on which we cluster these tweets. 
+
+	In the following subsections, we elaborate the system architecture, the featureset and the algorithms used to accomplish a rigorous sentiment analysis.
+
+#Architecture
+
+	The entire system is written in the form of a collection of Python scripts. We begin with using the Streaming API (cite) of twitter to crawl the tweets, and store them in the JSON format in a database which has the capabilities of a full-text search(elastic search - some shit). We then use our featureset (explained in the following substructures) to cluster these tweets in three clusters which we then hand annotate as 1. Positive Tweets, 2. Negative Tweets and 3. Neutral Tweets. 
+
+	For every tweet, we then compute the polarity of belonging in that cluster. We do the same by calculating a tweet's featureset's distance from the clusters' centroid. This information is stored in the database alongwith the tweet, and is used in indexing these tweets. 
+
+	Finally, based on the user's queries, we execute full-text searches on this indexed tweets, and estimate the overall polarity of the query by calculating the RMSD of the polarity of these given tweets.
+
+	The entire system is thus divided in the following modules - (i) Crawler, (ii) FeatureSet, (iii) Clusterer, (iv) Search. These modules are elaborated in the following subsections
+
+	###Crawler
+	<talk about streaming api and it's limitations>
+	<talk about indexing these in ElasticSearch>
+
+	###Featureset 
+	Give a table of featureset, and the tasks required to compute them.
+	eg. to do number of tokens, we run it through Spacy's NLP
+	to number of emoticons, we use <this> regex expresssion (put the expression there)
+
+	Give also the reason of using this feature
+
+	###Clusterer.
+	Talk about the mathematics of KMeans. 
+	Say you need 3 clusters. Explain why (I remember you read it in some paper)
+
+	Also talk about the centroid of kmeans cluster.
+	We calculate the distance of every tweet from the centroid to give the extent of polarity. eg. Tweet A belongs to positive cluster. Say its featureset is [1,1,1]. Say the centroid is [2,2,2] the polarity will be distance between [2,2,2] and [1,1,1]
+
+	We define a function ⍴(t_i), as follows:
+
+			Let ⍺ represent the cluster ID for a given tweet t_i.
+			Let centroid of the cluster ⍺ be represented by Ĉ_⍺
+			
+			⍴(t_i) = -1 ^ (<beta>) * sqrt( Ĉ_⍺ ^ 2 - featureset(t_i)^2 ). 
+					here <beta> = 1 if <alpha> is the negative cluster
+						<beta> = 2 if <alpha> is positive cluster
+
+			Here ⍴(t_i) represents polarity value (not normalized yet) of a given tweet. We calculate the euclidean distance of the tweet's feature representation from the Centroid of the cluster where it belongs. 
+
+		After calculating this value for every tweet, we normalize this in the following manner:
+
+			⍴_norm(t_i) =  <sign of ⍴(t_i)> * ( |⍴(t_i)|  - min( <|⍴(t_j)|> ) )/ ( max( < |⍴(t_j)| > ) - min( < |⍴(t_j)| > )  ), where j ∈ [0,m], where m is the number of total tweets in the database
+
+		Finally, this normalized polarity is stored in the database alongwith the tweet as well.
+
+#Search
+	Talk what is full text search (look up apache lucene). The reason of using full text search.
+	Explain RMSD, and how we calculate RMSD over the aforementioned polarity
+
+	It is here, that the mathematical function formulated in the problem statement ⍵(s_i) is provided with a formulae. It goes something like
+
+			⍵(s_i) =  RMSD ( < ⍴_norm(t_i) > ), where t_i <belongs to> set of tweets resulted after running a fulltext search on the database with s_i as the query. 
+
+
+#Problem Statement
+The objective of this project/paper is to classify the general opinion about a certain products/domains as either Positive, Negative or mixed. For this purpose, we turn to the opinions posted by the people on Twitter as the data source. 
+
+##Motivation/Significance
+	The expressitivity that emerged on Twitter overtime enables users to quickly and effortlessly express their opinions, and led the platform to become a leading source of shaping public opinions. We find tweets mentioned in articles, blogs, and even newspapers, for this reason. In this paper, we accomplish the task of product specific sentiment analysis based on twitter data for this reason.
+
+##Mathematical Formulation
+	We define our system as a function 
+		
+		⍵(string) -> (-1,1)
+
+	This function maps a string to the real number space, taking values from -1 to 1, where -1 represents an absolute negative polarity, and 1 represents an absolute positive polarity.

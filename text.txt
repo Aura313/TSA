@@ -1,0 +1,36 @@
+eat
+sit here and work (outside)
+
+call me when youre done with current secitons of your report
+mail your stuff to yourself
+i gottta leave
+
+as soon as you're done with your report substantially, we move on to your Eval sectoin
+
+
+#Evaluation
+
+In this section, I will describe the manner in which the aforementioned system was put to test.
+Because of the unique use case of sentiment analysis, I was unable to find a gold standard dataset to put my hypothesis against. Thus I resorted to juxtapose my system's results against human judgement.
+
+##Experimental Setup
+
+I created 60 pairs of two tweets, taken from both of the clusters, in a way that I have pairs where one tweet is very polar, and the opposite one isn't (For isntance, one very positive, the other slightly negative); some cases where both tweets are very polar (one very positive, one very negative); some cases where neither of the tweets are very polar (one slightly positive, one slightly negative). Thereby the pairs can be classified into following four categories - 
+1. Very Postive, Very Negative
+2. Very Positive, Slightly negative
+3. Slightly Positive, Very Negative
+4. Slightly Positive, Slightly Negative
+
+It is to be noted that while the topics of the tweets across the pairs would be different, the topic of the tweets within a pair would be same.
+
+Then, I manually evaluated these pairs, and put them in either of the four clusters, based on human judgement. By comparing the machine mediated and human mediated clustering, following results emerged - 
+
+% of pair correctly clustered in Cluster 1 - 
+% of pair correctly clustered in Cluster 2 - 
+% of pair correctly clustered in Cluster 3 - 
+% of pair correctly clustered in Cluster 4 - 
+
+Future Scope -
+Using twitter usage features to better guess sentiments. We could increase the emphasis of the tweet polarity with the amount of retweets and favorites it got. For instance, if a tweet is very negatively talking about the iPhone and is very popular, it is a safe assumption that the opinion is popular in the platform (in some circles, and the same must be reflected by the system)
+
+Using the user's previous tweet's sentiments to make guesses about their current tweet's sentiment.
